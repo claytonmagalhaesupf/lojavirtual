@@ -13,11 +13,16 @@
     @if (session('status'))
         <p>{{ session('status') }} </p>
     @endif   
+
+     @if ($message = Session::get('error'))
+        <p>{{ $message }} </p>
+    @endif  
     
     <ul>
         @foreach($types as $type)
             <li> {{ $type['name'] }} 
                 <a href="{{ url('/types/update', ['id' => $type->id]) }}">Editar</a>
+                <a href="{{ url('/types/delete', ['id' => $type->id]) }}">Excluir</a>
             </li>
         @endforeach
     </ul>

@@ -3,29 +3,54 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\Type;
 use Illuminate\Http\Request;
 
 class ProductsController extends Controller
 {
-    //função que irá mostrar a view de listagem
-    //passando como parâmetro a consulta no banco com ::all()
-    public function index()
+    public function index(Request $request)
     {
+        //dd($request->all());
+        $filter = $request->input('search');
+        if ($filter) {
+            $products = Product::where('name', 'like', "%$filter%")->get();
+        } else {
+            $products = Product::with('type')
+                ->orderBy('name', 'asc') // ordena pelo preço
+                ->get();
+        }
+
         return view('products.index', [
-            'products' => Product::all()
+            'products' => $products,
+            'filter' => $filter
         ]);
     }
 
+    /*$products = DB::select("SELECT name, price FROM products WHERE price > ?", [100]);*/
+
+    /*$results = DB::table('products')
+    ->join('types', 'types.id', '=', 'products.type_id')
+    ->select('products.*', 'types.name as type_name')
+    ->get();*/
+
+    /*$data = json_decode(json_encode($stdObject), true);*/
+
     public function create()
     {
-        return view('products.create');
+        return view('products.create', [
+            'types' => Type::all()
+        ]);
     }
 
-    //função chamada no submit do form..
-    //será um POST com os dados
     public function store(Request $request)
     {
-        //não esquecer import do Product model.
+        $request->validate([
+            'name' => 'required|min:2|max:50',
+            'quantity' => 'required|gt:0',
+            'price' => 'required|gt:0',
+            //'type_id' => 'required|exists:types,id',
+        ]);
+
         Product::create([
             'name' => $request->name,
             'description' => $request->description,
@@ -33,23 +58,18 @@ class ProductsController extends Controller
             'price' => $request->price,
             'type_id' => $request->type_id
         ]);
-        return ' <p> Produto salvo com sucesso! </p> 
-                  <a href="/products">Voltar</a>';
+        return redirect('/products')->with('success', 'Produto cadastrado com sucesso!');
     }
 
     public function edit($id)
     {
-        //find é o método que faz select * from products where id= ?
         $product = Product::find($id);
-        //retornamos a view passando a TUPLA de produto consultado
-        return view('products.edit', ['product' => $product]);
+        return view('products.edit', ['product' => $product,  'types' => Type::all()]);
     }
-
 
     public function update(Request $request)
     {
         $product = Product::find($request->id);
-        //método update faz um update product set name = ? etc...
         $product->update([
             'name' => $request->name,
             'description' => $request->description,
@@ -58,5 +78,12 @@ class ProductsController extends Controller
             'type_id' => $request->type_id
         ]);
         return redirect('/products')->with('success', 'Produto atualizado com sucesso!');
+    }
+
+    public function destroy($id)
+    {
+        $product = Product::find($id);
+        $product->delete();
+        return redirect('/products')->with('success', 'Produto excluído com sucesso!');
     }
 }
