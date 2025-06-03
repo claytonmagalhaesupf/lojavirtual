@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <h3 class="text-center font-semibold text-gray-800 dark:text-gray-200 ">
+        <h3 class="font-semibold text-gray-800 dark:text-gray-200 ">
             {{ __('Manutenção de produtos') }}
         </h3>
     </x-slot>
