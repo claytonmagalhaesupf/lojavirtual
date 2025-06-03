@@ -29,7 +29,7 @@
             @endif
 
             {{-- Formulário de busca --}}
-            <form action="{{ url('/products') }}" method="GET" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <form action="{{ url('/products') }}" method="GET" class="flex flex-wrap gap-4 items-end">
                 <div>
                     <x-input-label for="search" value="Pesquisar produto" />
                     <x-text-input id="search" name="search" type="text" value="{{ $filter ?? '' }}"
