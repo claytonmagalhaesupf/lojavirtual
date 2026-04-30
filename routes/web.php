@@ -1,18 +1,29 @@
 <?php
 
 use App\Http\Controllers\ProductsController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function() {
+Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/products', [ProductsController::class, 'index']);
-Route::get('/products/new', [ProductsController::class, 'create']);
-Route::post('/products/new', [ProductsController::class, 'store']);
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/products/update/{id}', [ProductsController::class, 'edit']);
-Route::post('/products/update/', [ProductsController::class, 'update']);
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-Route::get('/products/delete/{id}', [ProductsController::class, 'destroy']);
+    Route::get('/products', [ProductsController::class, 'index'])->name('products');
+    Route::get('/products/new', [ProductsController::class, 'create'])->name('products.create');
+    Route::post('/products/new', [ProductsController::class, 'store'])->name('products.store');
+
+    Route::get('/products/update/{id}', [ProductsController::class, 'edit'])->name('products.edit');
+    Route::post('/products/update/', [ProductsController::class, 'update'])->name('products.update');
+    Route::get('/products/delete/{id}', [ProductsController::class, 'destroy'])->name('products.destroy');
+});
+
+require __DIR__ . '/auth.php';

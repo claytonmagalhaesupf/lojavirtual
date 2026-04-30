@@ -1,65 +1,61 @@
-@extends('layouts.crud')
-
-@section('title', 'Cadastrar produto')
-
-@section('content')
-<form enctype="multipart/form-data" class="w-full bg-white dark:bg-gray-800 p-6 rounded-lg
+<x-app-layout>
+    <form enctype="multipart/form-data" class="w-full bg-white dark:bg-gray-800 p-6 rounded-lg
 shadow" action="{{ url('products/new') }}" method="POST">
-    @csrf
+        @csrf
 
-    @if(session('error')) 
+        @if(session('error'))
         <div class="bg-red-100 text-red-800 p-3 rounded mb-4">
             {{ session('error') }}
         </div>
-    @endif
+        @endif
 
-    <h1 class="text-2xl font-bold mb-6 text-gray-900
+        <h1 class="text-2xl font-bold mb-6 text-gray-900
 dark:text-white">Cadastrar Produto</h1>
 
-    <x-meu-input name="name" label="Nome:" />
+        <x-meu-input name="name" label="Nome:" />
 
-    @error('name')
-    <p class="text-red-600 mb-4 text-sm">{{ $message }}</p>
-    @enderror
+        @error('name')
+        <p class="text-red-600 mb-4 text-sm">{{ $message }}</p>
+        @enderror
 
-    <x-meu-input name="quantity" label="Quantidade:" type="number" />
+        <x-meu-input name="quantity" label="Quantidade:" type="number" />
 
-    @error('quantity')
-    <p class="text-red-600 mb-4 text-sm">{{ $message }}</p>
-    @enderror
+        @error('quantity')
+        <p class="text-red-600 mb-4 text-sm">{{ $message }}</p>
+        @enderror
 
-    <x-meu-input name="description" label="Descrição:" type="text" />
+        <x-meu-input name="description" label="Descrição:" type="text" />
 
-    <x-meu-input name="price" label="Preço:" type="number" />
+        <x-meu-input name="price" label="Preço:" type="number" />
 
-    @error('price')
-    <p class="text-red-600 mb-4 text-sm">{{ $message }}</p>
-    @enderror
+        @error('price')
+        <p class="text-red-600 mb-4 text-sm">{{ $message }}</p>
+        @enderror
 
-    <label class="block mb-1 text-gray-700 dark:text-gray-300">Imagem:</label>
-    <input name="image" type="file" accept="image/*" class="w-full p-2 mb-4
+        <label class="block mb-1 text-gray-700 dark:text-gray-300">Imagem:</label>
+        <input name="image" type="file" accept="image/*" class="w-full p-2 mb-4
 rounded border dark:bg-gray-700 dark:text-white" />
 
-    @error('image')
+        @error('image')
         <p class="text-red-600 font-bold text-sm mb-4">{{ $message }}</p>
-    @enderror
+        @enderror
 
 
 
-    <select class="w-full p-2 mb-4 rounded border dark:bg-gray-700 dark:text-white" name="type_id">
-        <option value="">Selecione</option>
+        <select class="w-full p-2 mb-4 rounded border dark:bg-gray-700 dark:text-white" name="type_id">
+            <option value="">Selecione</option>
 
-        @foreach($types as $type)
-        <option value="{{ $type->id }}">
-            {{ $type->name }}
-        </option>
-        @endforeach
-    </select>
+            @foreach($types as $type)
+            <option value="{{ $type->id }}">
+                {{ $type->name }}
+            </option>
+            @endforeach
+        </select>
 
-    <x-meu-button>
-        Salvar
-    </x-meu-button>
+        <x-primary-button>
+            Salvar
+        </x-primary-button>
 
 
-</form>
-@endsection
+    </form>
+</x-app-layout>

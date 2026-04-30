@@ -1,8 +1,4 @@
-@extends('layouts.crud')
-
-@section('title', 'Atualizar produto')
-
-@section('content')
+<x-app-layout>
 <form enctype="multipart/form-data"
     class="w-full bg-white dark:bg-gray-800 p-6 rounded-lg shadow" action="{{ url('products/update') }}" method="POST">
 
@@ -50,9 +46,9 @@ rounded border dark:bg-gray-700 dark:text-white" />
         @endforeach
     </select>
 
-    <x-meu-button>
+    <x-primary-button>
         Salvar
-    </x-meu-button>
+    </x-primary-button>
 
 </form>
-@endsection
+</x-app-layout>
