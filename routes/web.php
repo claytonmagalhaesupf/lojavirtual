@@ -27,6 +27,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/products/delete/{id}', [ProductsController::class, 'destroy'])->name('products.destroy');
 
     Route::get('/types/new', [TypesController::class, 'create'])->name('types.create');
+
+    Route::get('/products/report', [ProductsController::class, 'report'])->name('products.report');
+    Route::get('/products/report/pdf', [ProductsController::class, 'reportPdf'])->name('products.report.pdf');
 });
 
 require __DIR__ . '/auth.php';

@@ -4,11 +4,46 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use App\Models\Type;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class ProductsController extends Controller
 {
+    public function reportPdf(Request $request)
+    {
+        $products = DB::table('products')
+            ->join('types', 'products.type_id', '=', 'types.id')
+            ->select(
+                'products.id',
+                'products.name',
+                'products.description',
+                'products.quantity',
+                'products.price',
+                //'products.image',
+                //'products.type_id',
+                'types.name as type_name',
+                'products.created_at',
+                'products.updated_at'
+            )
+            ->when($request->name, fn($query, $name) => $query->where('products.name', 'like', "%{$name}%"))
+            ->when($request->type_id, fn($query, $typeId) => $query->where('products.type_id', $typeId))
+            ->when($request->min_quantity, fn($query, $quantity) => $query->where('products.quantity', '>=', $quantity))
+            ->when($request->max_quantity, fn($query, $quantity) => $query->where('products.quantity', '<=', $quantity))
+            ->orderBy('products.name')
+            ->get();
+
+        return Pdf::loadView('products.report-pdf', compact('products'))
+            ->download('relatorio-produtos.pdf');
+    }
+
+    public function report()
+    {
+        return view('products.report', [
+            'types' => Type::orderBy('name')->get()
+        ]);
+    }
     //
     public function create()
     {
@@ -43,15 +78,15 @@ class ProductsController extends Controller
                 'type_id' => $request->type_id
             ]);
             return redirect('/products')->with('success', 'Produto criado com sucesso');
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             //storage/logs/laravel.log
             Log::error('erro ao salvar produto', [
                 'error' => $e->getMessage()
             ]);
 
             return redirect()->back()
-            ->with('error', 'Não foi possível salvar o produto.')
-            ->withInput();
+                ->with('error', 'Não foi possível salvar o produto.')
+                ->withInput();
         }
     }
 
