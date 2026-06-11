@@ -5,10 +5,14 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TypesController;
 use App\Models\Product;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+
+Route::get('/', [HomeController::class, 'index']);
+
+Route::get('/contato', function () {
+    return view('contact');
+})->name('contato');
 
 Route::get('/dashboard', function () {
     $totalProducts = Product::count();

@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('description')->nullable();
             $table->integer('quantity');
-            $table->decimal('price', 8, 2);
+            $table->decimal('price', 8, 2); 
             $table->unsignedBigInteger('type_id');
             $table->foreign('type_id')->references('id')->on('types');
         });

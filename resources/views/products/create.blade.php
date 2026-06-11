@@ -18,6 +18,8 @@ dark:text-white">Cadastrar Produto</h1>
         <p class="text-red-600 mb-4 text-sm">{{ $message }}</p>
         @enderror
 
+        <x-meu-input name="brand" label="Marca:" />
+
         <x-meu-input name="quantity" label="Quantidade:" type="number" />
 
         @error('quantity')
