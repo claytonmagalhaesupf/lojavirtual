@@ -1,16 +1,19 @@
 <?php
 
-use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TypesController;
+use App\Models\Product;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [HomeController::class, 'index']);
-
+Route::get('/', function () {
+    return view('welcome');
+});
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    $totalProducts = Product::count();
+
+    return view('dashboard', compact('totalProducts'));
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
