@@ -12,13 +12,17 @@ class ProductFactory extends Factory
 
     public function definition(): array
     {
+        $type = Type::firstOrCreate([
+            'name' => 'Geral',
+        ]);
+
         return [
             'name' => fake()->words(3, true),
             'description' => fake()->sentence(10),
             'quantity' => fake()->numberBetween(1, 200),
             'price' => fake()->randomFloat(2, 10, 1000),
             'image' => null,
-            'type_id' => Type::inRandomOrder()->first()?->id ?? Type::factory(),
+            'type_id' => $type->id,
         ];
     }
 }
