@@ -8,6 +8,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index']);
 
+Route::get('/contato', function () {
+    return view('contact');
+})->name('contato');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -31,6 +34,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/products/report', [ProductsController::class, 'report'])->name('products.report');
     Route::get('/products/report/pdf', [ProductsController::class, 'reportPdf'])->name('products.report.pdf');
 });
+
+
 
 Route::get('/api/products', [ProductsController::class, 'apiIndex'])->name('products.api.index');
 
